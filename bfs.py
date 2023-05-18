@@ -32,8 +32,12 @@ def read_input(till_round):
                 }
             )
             # add match data to home team's list of matches
-            G.add_edge(home_team, away_team, match_index=len(matches) - 1)
-            G.add_edge(away_team, home_team, match_index=len(matches) - 1)
+            if G.has_edge(home_team, away_team):
+                old = G.get_edge_data(home_team, away_team)["match_index"]
+                old.append(len(matches) - 1)
+                G.add_edge(home_team, away_team, match_index=old)
+            else:
+                G.add_edge(home_team, away_team, match_index=[len(matches) - 1])
             if home_team not in teams_data:
                 teams_data[home_team] = {
                     "match_played": 0,
@@ -59,5 +63,19 @@ def read_input(till_round):
     return [G, matches, teams_data]
 
 
-res = read_input(7)
-print(res)
+def bfs():
+    input = read_input(1)
+    unvisited = list(input[0].nodes)
+    # for v in unvisited:
+    for i in nx.dfs_edges(input[0]):
+        input[2][i[0]]["match_played"] += len(
+            input[0].get_edge_data(i[0], i[1])["match_index"]
+        )
+        input[2][i[1]]["match_played"] += len(
+            input[0].get_edge_data(i[0], i[1])["match_index"]
+        )
+
+        print(i)
+
+
+bfs()
