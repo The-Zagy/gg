@@ -81,10 +81,8 @@ def topological_sort(graph):
     # If not all nodes were added to the sorted list, the graph contains cycles
     if len(sorted_nodes) != len(graph.nodes()) - 1:
         raise ValueError("Graph contains cycles.")
-    hash_pos = {}
-    for i in range(len(sorted_nodes)):
-        hash_pos[sorted_nodes[i]]=i
-    return [sorted_nodes,hash_pos]
+
+    return [sorted_nodes]
 
 
 def construct_rounds(till_round):
@@ -177,7 +175,7 @@ def get_sorted_rounds(rounds):
         sorted_round = sort_round(rounds[round])
         round_score = calc_score_for_round(rounds[round])
         temp = []
-        for team in sorted_round:
+        for team in sorted_round[0]:
             if team == "virtual":
                 continue
             temp.append([team, round_score[team]])
@@ -198,14 +196,25 @@ def get_sorted_rounds(rounds):
 rounds_unsorted = construct_rounds(20)
 G.add_nodes_from(rounds_unsorted)
 sorted_rounds = get_sorted_rounds(rounds_unsorted)
-def merge_two_rounds(round1,round2):
-    hash1 = round1[1]
-    hash2 = round2[1]
-    standing1 = round1[0]
-    standing2 = round2[0]
+def sort_critera(i):
+    return i[1]
+def merge_rounds(rounds):
+    
     res = []
-    for (i,j) in standing1, standing2:
-        if(i[0] in hash1 and standing2[hash2[i[0]]]):
+    hash = {}
+    for round in rounds:
+        for team in round:
+            if(team[0] not in hash):
+                hash[team[0]] =0
+            hash[team[0]]+= team[1]
+    for team in hash:
+        res.append([team,hash[team]])
+    
+    return sorted(res,key=sort_critera)
+
+
+print(merge_rounds(sorted_rounds))
         
+
 # for i in sorted_rounds:
     # None
