@@ -1,5 +1,6 @@
-import networkx as nx
 import csv
+
+import networkx as nx
 
 # Define the matches data
 matches = [
@@ -49,11 +50,7 @@ def topological_sort(graph):
 
     # Create a queue to hold the nodes with no incoming edges
     # losers
-    queue = [
-        node
-        for node, count in incoming_edges.items()
-        if count == 0 and node != "virtual"
-    ]
+    queue = [node for node, count in incoming_edges.items() if count == 0 and node != "virtual"]
     print(queue)
     print(incoming_edges["virtual"])
     for from_node, to_node in graph.in_edges("virtual"):
@@ -182,6 +179,7 @@ def get_sorted_rounds(rounds):
         sorted_rounds.append(temp)
     return sorted_rounds
 
+
 # public static void merge(Comparable[] a, int lo, int mid, int hi)
 # { // Merge a[lo..mid] with a[mid+1..hi].
 #  int i = lo, j = mid+1;
@@ -196,25 +194,28 @@ def get_sorted_rounds(rounds):
 rounds_unsorted = construct_rounds(20)
 G.add_nodes_from(rounds_unsorted)
 sorted_rounds = get_sorted_rounds(rounds_unsorted)
+
+
 def sort_critera(i):
     return i[1]
+
+
 def merge_rounds(rounds):
-    
     res = []
     hash = {}
     for round in rounds:
         for team in round:
-            if(team[0] not in hash):
-                hash[team[0]] =0
-            hash[team[0]]+= team[1]
+            if team[0] not in hash:
+                hash[team[0]] = 0
+            hash[team[0]] += team[1]
     for team in hash:
-        res.append([team,hash[team]])
-    
-    return sorted(res,key=sort_critera)
+        res.append([team, hash[team]])
+
+    return sorted(res, key=sort_critera)
 
 
 print(merge_rounds(sorted_rounds))
-        
+
 
 # for i in sorted_rounds:
-    # None
+# None

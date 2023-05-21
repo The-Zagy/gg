@@ -1,5 +1,9 @@
 import csv
+import sys
+import argparse
+
 import networkx as nx
+from tabulate import tabulate
 
 
 def read_input(till_round):
@@ -13,13 +17,15 @@ def read_input(till_round):
             round_num = int(row[0].strip())
             if round_num > till_round:
                 break
-            match_date = row[1]
-            home_team = row[2]
-            away_team = row[3]
-            home_score = int(row[4])
-            away_score = int(row[5])
-            result = row[6]
-
+            try:
+                match_date = row[1]
+                home_team = row[2]
+                away_team = row[3]
+                home_score = int(row[4])
+                away_score = int(row[5])
+                result = row[6]
+            except:
+                continue
             matches.append(
                 [
                     round_num,
@@ -62,13 +68,16 @@ def read_input(till_round):
                     "gd": 0,
                     "points": 0,
                 }
+    # all_edges = list(G.edges()) + [(v, u) for u, v in G.edges()]
+    # for i in all_edges:
+    #     print(i)
     return [G, matches, teams_data]
 
 
 def dfs(until_round):
     G, matches, teams_data = read_input(until_round)
     # unvisited = list(input[0].nodes)
-    for teams in nx.dfs_edges(G, depth_limit=100):
+    for teams in nx.edge_dfs(G):
         match_index = G.get_edge_data(teams[0], teams[1])["match_index"]
         print(teams)
         # update each match data in the team hash
@@ -82,15 +91,13 @@ def dfs(until_round):
             teams_data[matches[match][2]]["gf"] += matches[match][4]
             teams_data[matches[match][2]]["ga"] += matches[match][5]
             teams_data[matches[match][2]]["gd"] = (
-                teams_data[matches[match][2]]["gf"]
-                - teams_data[matches[match][2]]["ga"]
+                teams_data[matches[match][2]]["gf"] - teams_data[matches[match][2]]["ga"]
             )
 
             teams_data[matches[match][3]]["gf"] += matches[match][5]
             teams_data[matches[match][3]]["ga"] += matches[match][4]
             teams_data[matches[match][3]]["gd"] = (
-                teams_data[matches[match][3]]["gf"]
-                - teams_data[matches[match][3]]["ga"]
+                teams_data[matches[match][3]]["gf"] - teams_data[matches[match][3]]["ga"]
             )
 
             if matches[match][6] == "H":
@@ -110,8 +117,29 @@ def dfs(until_round):
     res = list(teams_data.values())
     res.sort(reverse=True, key=lambda i: i["points"])
 
-    for t in res:
-        print(t)
+    # for t in res:
+    #     print(t)
+    headers = res[0].keys()
+    table_data = [list(row.values()) for row in res]
+    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
 
 
-dfs(9)
+def main():
+    parser = argparse.ArgumentParser(
+        description="""
+    display the standing of the league for a given round or date
+    """
+    )
+    parser.add_argument("-r", "--round", type=int, help="round number")
+    parser.add_argument("-d", "--date", type=str, help="standing date")
+    args = parser.parse_args()
+    r = args.round
+    date = args.date
+    if r is None and date is None:
+        print("use --help for help menu")
+        sys.exit()
+    dfs(r)
+
+
+if __name__ == "__main__":
+    main()
