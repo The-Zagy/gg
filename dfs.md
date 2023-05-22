@@ -28,4 +28,11 @@ O(E)
 O(E + V)
 - Sorting: O(V*logV)
 
-Which means O(E+V*logV)
+O(E+V * log(V))
+
+O(E+Vlog(V))
+
+if number of rounds = X E = (V/2) * X O((VX)/2 + V*log(V))
+
+E = (V/2) * X O((VX)/2 + V*log(V))
+
