@@ -4,21 +4,35 @@ import argparse
 
 import networkx as nx
 from tabulate import tabulate
-
+from datetime import datetime
 
 def read_input(till_round):
     G = nx.Graph()
     teams_data = {}
     matches = []
+    is_round = True
     with open("matches.csv", "r") as file:
         reader = csv.reader(file)
         next(reader)  # skip header row
         for row in reader:
-            round_num = int(row[0].strip())
-            if round_num > till_round:
-                continue
-            try:
+            if isinstance(till_round,int):
+                round_num = int(row[0].strip())
+                is_round = True
+                if round_num > till_round:
+                    continue
+            else:
                 match_date = row[1]
+                match_date = datetime.strptime(match_date, "%d/%m/%Y")
+                if not isinstance(till_round,datetime):
+                    till_round = datetime.strptime(till_round, "%d/%m/%Y")
+                is_round = False
+                if match_date > till_round:
+                    break
+            try:
+                if not is_round:
+                    round_num = int(row[0].strip())
+                else:
+                    match_date = row[1]
                 home_team = row[2]
                 away_team = row[3]
                 home_score = int(row[4])
@@ -138,7 +152,13 @@ def main():
     if r is None and date is None:
         print("use --help for help menu")
         sys.exit()
-    dfs(r)
+    if r is not None and date is None:
+        dfs(int(r))
+    elif r is None and date is not None:
+        dfs(date)
+    else:
+        print("use --help for help menu")
+        sys.exit()
 
 
 if __name__ == "__main__":
