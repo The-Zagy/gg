@@ -27,12 +27,14 @@ O(E)
 - DFS:
 O(E + V)
 - Sorting: O(V*logV)
-
+<br>
 O(E+V * log(V))
-
+<br>
 O(E+Vlog(V))
-
+<br>
 if number of rounds = X E = (V/2) * X O((VX)/2 + V*log(V))
-
-E = (V/2) * X O((VX)/2 + V*log(V))
+<br>
+E = (V/2) * X 
+<br>
+O((VX)/2 + V*log(V))
 
