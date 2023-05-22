@@ -32,7 +32,7 @@ O(E+V * log(V))
 <br>
 O(E+Vlog(V))
 <br>
-if number of rounds = X E = (V/2) * X O((VX)/2 + V*log(V))
+if number of rounds = X 
 <br>
 E = (V/2) * X 
 <br>
