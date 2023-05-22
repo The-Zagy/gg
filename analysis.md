@@ -46,15 +46,19 @@ O(V\log(V))
 $$
 
 $$
-
 O(E+V * log(V))
-\\
+$$
+$$
 O(E+Vlog(V))
-\\
-if \: number \: of \: rounds = X
-\\
+$$
+
+if number of rounds = X
+
+$$
 E = \frac{V}{2}* X
-\\
+$$
+
+$$
 O(\frac{V.X}{2} + V\log(V))
 $$
 
