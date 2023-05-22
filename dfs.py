@@ -24,7 +24,11 @@ def read_input(till_round):
                 match_date = row[1]
                 match_date = datetime.strptime(match_date, "%d/%m/%Y")
                 if not isinstance(till_round,datetime):
-                    till_round = datetime.strptime(till_round, "%d/%m/%Y")
+                    try:
+                        till_round = datetime.strptime(till_round, "%d/%m/%Y")
+                    except:
+                        print("The date does not must be in the following format '%MM%MM%YYYY' \nuse --help for help ")
+                        sys.exit()
                 is_round = False
                 if match_date > till_round:
                     break
@@ -93,7 +97,7 @@ def dfs(until_round):
     # unvisited = list(input[0].nodes)
     for teams in nx.edge_dfs(G):
         match_index = G.get_edge_data(teams[0], teams[1])["match_index"]
-        print(teams)
+        # print(teams)
         # update each match data in the team hash
         for match in match_index:
             # update home team
@@ -149,15 +153,12 @@ def main():
     args = parser.parse_args()
     r = args.round
     date = args.date
-    if r is None and date is None:
-        print("use --help for help menu")
-        sys.exit()
     if r is not None and date is None:
-        dfs(int(r))
+        dfs(r)
     elif r is None and date is not None:
         dfs(date)
     else:
-        print("use --help for help menu")
+        print("use --help for help ")
         sys.exit()
 
 
