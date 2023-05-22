@@ -16,7 +16,7 @@ def read_input(till_round):
         for row in reader:
             round_num = int(row[0].strip())
             if round_num > till_round:
-                break
+                continue
             try:
                 match_date = row[1]
                 home_team = row[2]

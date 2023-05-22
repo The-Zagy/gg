@@ -7,7 +7,7 @@ pip install -r requirements.txt
 
 ## usage
 ```shell
-usage: dfs.py [-h] [-r ROUND] [-d DATE]
+usage: python dfs.py [-h] [-r ROUND] [-d DATE]
 
 display the standing of the league for a given round or date
 
